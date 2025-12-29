@@ -10,9 +10,11 @@ body {
   height: 100vh;
   background: linear-gradient(135deg, #0d1117, #161b22);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
+  color: #f0f6fc;
 }
 
 button {
@@ -25,15 +27,9 @@ button {
   color: white;
 }
 
-button:active {
-  transform: scale(0.97);
-}
-
-.status {
-  position: absolute;
-  bottom: 30px;
-  color: #f0f6fc;
-  font-size: 18px;
+.name {
+  margin-top: 30px;
+  font-size: 28px;
 }
 </style>
 </head>
@@ -41,15 +37,14 @@ button:active {
 <body>
 
 <button onclick="next24Game()">Next 24Game</button>
-<div class="status" id="status">พร้อมใช้งาน</div>
+<div class="name" id="name">—</div>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz9y9CKLNmlK0uZ3p7gDpNx-QkFSEy5Ib3c5ksKceJaBkCjozXLyYaC_2j_QvLyDZi4/exec";
-const GAME_NAME = "24Game"; // 👈 ส่งชื่อเกมนี้ไปอย่างเดียว
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzoO3R5swrLRN23u8iOtxmFMVY14YxL2Tb_qmrp347A1_k8qMADuax_ryTVDGpAechJ/exec";
+const GAME_NAME = "24Game";
 
 function next24Game() {
-  const status = document.getElementById("status");
-  status.innerText = "กำลังเรียกคิว 24Game...";
+  document.getElementById("name").innerText = "กำลังเรียกคิว...";
 
   fetch(
     WEB_APP_URL + "?game=" + encodeURIComponent(GAME_NAME),
@@ -57,18 +52,19 @@ function next24Game() {
   )
   .then(res => res.text())
   .then(txt => {
-    if (txt === "OK") {
-      status.innerText = "เรียกคิว 24Game สำเร็จ ✅";
+    if (txt.startsWith("OK|")) {
+      const name = txt.split("|")[1];
+      document.getElementById("name").innerText =
+        "ตอนนี้คิว: " + name;
     } else if (txt === "NOT_FOUND") {
-      status.innerText = "ไม่มีคิว 24Game แล้ว ❌";
-    } else if (txt === "EMPTY") {
-      status.innerText = "ไม่มีคิวเหลือแล้ว";
+      document.getElementById("name").innerText =
+        "ไม่มีคิว 24Game แล้ว";
     } else {
-      status.innerText = txt;
+      document.getElementById("name").innerText = txt;
     }
   })
   .catch(() => {
-    status.innerText = "เกิดข้อผิดพลาด";
+    document.getElementById("name").innerText = "เกิดข้อผิดพลาด";
   });
 }
 </script>
