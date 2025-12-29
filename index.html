@@ -1,4 +1,4 @@
-เลือกเกม html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
@@ -76,7 +76,7 @@ h1 {
     color: #fff;
 }
 
-/* ปุ่ม */
+/* Buttons */
 .btn-24 { background: #2ea043; }
 .btn-24:hover { background: #3fb950; }
 
@@ -115,7 +115,8 @@ h1 {
                 นำเลข 4 ตัวมาบวก ลบ คูณ หาร<br>
                 ให้ได้ผลลัพธ์เท่ากับ 24
             </p>
-            <button class="btn-24" onclick="goNextPage(event, '24game.html')">
+            <button class="btn-24"
+                onclick="goNextPage(event, '24game.html', true)">
                 ควบคุม
             </button>
         </div>
@@ -127,7 +128,8 @@ h1 {
                 เกมปริศนา 3D<br>
                 ฝึกการคิดเป็นขั้นตอน
             </p>
-            <button class="btn-rubik" onclick="goNextPage(event, 'rubik.html')">
+            <button class="btn-rubik"
+                onclick="goNextPage(event, 'rubik.html', true)">
                 ควบคุม
             </button>
         </div>
@@ -135,8 +137,10 @@ h1 {
 </div>
 
 <script>
-function goNextPage(e, url) {
-    const card = e.currentTarget.closest(".card");
+function goNextPage(e, url, fromButton = false) {
+    if (fromButton) e.stopPropagation();
+
+    const card = e.currentTarget.closest(".card") || e.currentTarget;
     const rect = card.getBoundingClientRect();
 
     const circle = document.createElement("span");
