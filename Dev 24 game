@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Next Game</title>
+<style>
+body {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background: #0d1117;
+}
+
+button {
+  font-size: 32px;
+  padding: 20px 60px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<button onclick="nextGame()">Next</button>
+
+<script>
+function nextGame() {
+  fetch("https://script.google.com/macros/s/AKfycby02thN-Er3EcHZL3trwwqOOPIVR1iqfLEOO-scD68A-TCO6XwYTGD28NeFtpTY2zETvg/exec", {
+    method: "POST"
+  })
+  .then(res => res.text())
+  .then(txt => alert(txt))
+  .catch(err => alert("Error"));
+}
+</script>
+
+</body>
+</html>
