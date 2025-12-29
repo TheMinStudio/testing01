@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>GAME MENU</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #0d1117, #161b22);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: #f0f6fc;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 46px;
+    margin-bottom: 40px;
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 260px);
+    gap: 30px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: #161b22;
+    border-radius: 16px;
+    padding: 28px 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.6);
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.card p {
+    margin: 12px 0 22px;
+    font-size: 14px;
+    color: #8b949e;
+    line-height: 1.6;
+}
+
+.card button {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* ปุ่ม */
+.btn-24 { background: #2ea043; }
+.btn-24:hover { background: #3fb950; }
+
+.btn-rubik { background: #1f6feb; }
+.btn-rubik:hover { background: #388bfd; }
+
+/* Ripple */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>เลือกเกม</h1>
+
+    <div class="grid">
+        <!-- 24 GAME -->
+        <div class="card" onclick="goNextPage(event, '24gamedev.html')">
+            <h2>24 GAME</h2>
+            <p>
+                นำเลข 4 ตัวมาบวก ลบ คูณ หาร<br>
+                ให้ได้ผลลัพธ์เท่ากับ 24
+            </p>
+            <button class="btn-24" onclick="goNextPage(event, '24gamedev.html')">
+                ควบคุม
+            </button>
+        </div>
+
+        <!-- Rubik -->
+        <div class="card" onclick="goNextPage(event, '24gamedev.html')">
+            <h2>เกมรูบิค</h2>
+            <p>
+                เกมปริศนา 3D<br>
+                ควบคุม  </p>
+            <button class="btn-rubik" onclick="goNextPage(event, '24gamedev.html')">
+                เกมรูบิค
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function goNextPage(e, url) {
+    const card = e.currentTarget.closest(".card");
+    const rect = card.getBoundingClientRect();
+
+    const circle = document.createElement("span");
+    const diameter = Math.max(card.clientWidth, card.clientHeight);
+    const radius = diameter / 2;
+
+    circle.className = "ripple";
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${e.clientX - rect.left - radius}px`;
+    circle.style.top = `${e.clientY - rect.top - radius}px`;
+
+    const oldRipple = card.querySelector(".ripple");
+    if (oldRipple) oldRipple.remove();
+
+    card.appendChild(circle);
+
+    setTimeout(() => {
+        window.location.href = url;
+    }, 250);
+}
+</script>
+
+</body>
+</html>
