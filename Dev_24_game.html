@@ -2,37 +2,94 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Next Game</title>
+<title>Game Queue Control</title>
+
 <style>
 body {
-  display: flex;
+  margin: 0;
   height: 100vh;
+  background: linear-gradient(135deg, #0d1117, #161b22);
+  display: flex;
   justify-content: center;
   align-items: center;
-  background: #0d1117;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 button {
-  font-size: 32px;
-  padding: 20px 60px;
-  border-radius: 12px;
+  font-size: 24px;
+  padding: 20px 40px;
+  border-radius: 14px;
   border: none;
   cursor: pointer;
+  background: #238636;
+  color: white;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.status {
+  grid-column: span 2;
+  text-align: center;
+  color: #f0f6fc;
+  margin-top: 10px;
 }
 </style>
 </head>
+
 <body>
 
-<button onclick="nextGame()">Next</button>
+<div class="container">
+  <button onclick="nextGame('เกมA')">Next เกมA</button>
+  <button onclick="nextGame('เกมB')">Next เกมB</button>
+  <button onclick="nextGame('Rubik')">Next Rubik</button>
+  <button onclick="nextGame('24 GAME')">Next 24 GAME</button>
+
+  <div class="status" id="status">พร้อมใช้งาน</div>
+</div>
 
 <script>
-function nextGame() {
-  fetch("https://script.google.com/macros/s/AKfycbxkoKOeLy-dLTLusoK35u9IYsPkiPbusXHH2ML-HG_a5V7KZIL1XShQGeR8nN53OwMm/exec", {
-    method: "POST"
-  })
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz9y9CKLNmlK0uZ3p7gDpNx-QkFSEy5Ib3c5ksKceJaBkCjozXLyYaC_2j_QvLyDZi4/exec";
+
+function nextGame(gameName) {
+  document.getElementById("status").innerText =
+    "กำลังลบคิว: " + gameName + "...";
+
+  fetch(
+    WEB_APP_URL + "?game=" + encodeURIComponent(gameName),
+    { method: "POST" }
+  )
   .then(res => res.text())
-  .then(txt => alert(txt))
-  .catch(err => alert("Error"));
+  .then(txt => {
+    let msg = "";
+    switch (txt) {
+      case "OK":
+        msg = "ลบคิว " + gameName + " สำเร็จ ✅";
+        break;
+      case "NOT_FOUND":
+        msg = "ไม่พบเกม " + gameName + " ในคิว ❌";
+        break;
+      case "EMPTY":
+        msg = "ไม่มีคิวแล้ว";
+        break;
+      case "NO_GAME_PARAM":
+        msg = "ไม่ได้ส่งชื่อเกมมา";
+        break;
+      default:
+        msg = txt;
+    }
+    document.getElementById("status").innerText = msg;
+  })
+  .catch(err => {
+    document.getElementById("status").innerText = "เกิดข้อผิดพลาด";
+  });
 }
 </script>
 
