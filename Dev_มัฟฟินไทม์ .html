@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Next</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #0d1117, #161b22);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: #f0f6fc;
+}
+
+button {
+  font-size: 40px;
+  padding: 30px 80px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  background: #238636;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #2ea043;
+}
+
+button.loading {
+  background: #2ea043;
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.name {
+  margin-top: 30px;
+  font-size: 28px;
+  transition: all 0.3s ease;
+}
+</style>
+</head>
+
+<body>
+
+<button onclick="next24Game()">Next</button>
+<div class="name" id="name">—</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzoO3R5swrLRN23u8iOtxmFMVY14YxL2Tb_qmrp347A1_k8qMADuax_ryTVDGpAechJ/exec";
+const GAME_NAME = "มัฟฟินไทม์";
+
+function next24Game() {
+  const btn = document.querySelector("button");
+  const nameEl = document.getElementById("name");
+  
+  btn.classList.add("loading");
+  btn.disabled = true;
+  nameEl.innerText = "กำลังเรียกคิว...";
+
+  fetch(WEB_APP_URL + "?game=" + encodeURIComponent(GAME_NAME), { method: "POST" })
+    .then(res => res.text())
+    .then(txt => {
+      if (txt.startsWith("OK|")) {
+        const name = txt.split("|")[1];
+        nameEl.innerText = "ตอนนี้คิว: " + name;
+      } else if (txt === "NOT_FOUND") {
+        nameEl.innerText = `ไม่มีคิว ${GAME_NAME} แล้ว`;
+      } else {
+        nameEl.innerText = txt;
+      }
+    })
+    .catch(() => {
+      nameEl.innerText = "เกิดข้อผิดพลาด";
+    })
+    .finally(() => {
+      btn.classList.remove("loading");
+      btn.disabled = false;
+    });
+}
+</script>
+
+</body>
+</html>
