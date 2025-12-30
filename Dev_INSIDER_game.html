@@ -41,7 +41,7 @@ button {
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzoO3R5swrLRN23u8iOtxmFMVY14YxL2Tb_qmrp347A1_k8qMADuax_ryTVDGpAechJ/exec";
-const GAME_NAME = "INSIDER";
+const GAME_NAME = "Insider";
 
 function next24Game() {
   document.getElementById("name").innerText = "กำลังเรียกคิว...";
@@ -58,7 +58,7 @@ function next24Game() {
         "ตอนนี้คิว: " + name;
     } else if (txt === "NOT_FOUND") {
       document.getElementById("name").innerText =
-        "ไม่มีคิว INSIDER แล้ว";
+        "ไม่มีคิว ${GAME_NAME} แล้ว";
     } else {
       document.getElementById("name").innerText = txt;
     }
